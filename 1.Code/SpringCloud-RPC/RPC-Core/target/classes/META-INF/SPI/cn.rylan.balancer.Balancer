@@ -1,0 +1,2 @@
+roundRobin=cn.rylan.balancer.RoundRobinBalancer
+random=cn.rylan.balancer.RandomBalancer

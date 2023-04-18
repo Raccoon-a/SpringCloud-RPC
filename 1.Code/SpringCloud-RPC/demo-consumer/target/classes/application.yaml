@@ -17,4 +17,4 @@ spring:
       rpc:
         enable: true
         port: 2318
-        balancer: random
+        balancer: roundRobin

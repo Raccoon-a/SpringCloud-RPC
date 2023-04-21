@@ -21,7 +21,7 @@
 package cn.rylan.rest.http;
 
 import cn.rylan.model.RequestTemplate;
-import cn.rylan.rest.springboot.bean.SpringBeanFactory;
+import cn.rylan.rpc.springboot.bean.SpringBeanFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;

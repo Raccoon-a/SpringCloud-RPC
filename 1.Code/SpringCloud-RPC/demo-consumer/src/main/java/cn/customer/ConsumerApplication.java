@@ -1,15 +1,15 @@
 package cn.customer;
 
-import cn.rylan.rest.annotation.EnableRestHttpClinet;
+import cn.rylan.rest.annotation.EnableRestHttpClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-@EnableRestHttpClinet(basePackages = "cn.customer.rest")
+@EnableRestHttpClient(basePackages = "cn.customer.rest")
 @SpringBootApplication
-public class CustomerApplication {
+public class ConsumerApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context = SpringApplication.run(CustomerApplication.class);
+        ConfigurableApplicationContext context = SpringApplication.run(ConsumerApplication.class);
     }
 }

@@ -18,7 +18,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  */
-package cn.rylan.rest.springboot.bean;
+package cn.rylan.rpc.springboot.bean;
 
 import lombok.Data;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -26,8 +26,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Data
-@Component
 @ConfigurationProperties(prefix = "spring.cloud.stellalou.rest")
+@ConditionalOnProperty(name = "spring.cloud.stellalou.rest.enable", havingValue = "true")
 public class RestProperties {
 
     private String enable;

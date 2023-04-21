@@ -18,9 +18,9 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  */
-package cn.rylan.rest.springboot.scan;
+package cn.rylan.rpc.springboot.scan;
 
-import cn.rylan.rest.annotation.EnableRestHttpClinet;
+import cn.rylan.rest.annotation.EnableRestHttpClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -43,7 +43,7 @@ public class RestHttpClientScan implements ImportBeanDefinitionRegistrar, Applic
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        Map<String, Object> annotationAttributes = importingClassMetadata.getAnnotationAttributes(EnableRestHttpClinet.class.getName());
+        Map<String, Object> annotationAttributes = importingClassMetadata.getAnnotationAttributes(EnableRestHttpClient.class.getName());
         this.basePackage = (String[]) annotationAttributes.get("basePackages");
         this.classes = (Class[]) annotationAttributes.get("classes");
         RestHttpClientScanner restHttpClientScanner = new RestHttpClientScanner(registry);

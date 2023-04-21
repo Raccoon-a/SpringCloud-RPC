@@ -6,7 +6,6 @@ import cn.customer.service.StudentService;
 import cn.customer.service.TeacherService;
 import cn.rylan.rpc.annotation.Remote;
 import model.User;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +31,7 @@ public class TController {
     private TeacherService teacherService;
 
 
-    @GetMapping("/customer/user/id/{id}")
+    @GetMapping("/consumer/user/id/{id}")
     public String getUserInfo(@PathVariable("id") Integer id) throws IOException {
         User user = new User();
         user.setName("fucker");

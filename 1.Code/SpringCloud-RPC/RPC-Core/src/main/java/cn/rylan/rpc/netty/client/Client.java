@@ -3,18 +3,16 @@ package cn.rylan.rpc.netty.client;
 
 import cn.rylan.SPI.ExtensionLoad;
 import cn.rylan.balancer.Balancer;
-import cn.rylan.balancer.RandomBalancer;
 import cn.rylan.balancer.RoundRobinBalancer;
 import cn.rylan.model.ServiceInstance;
-import cn.rylan.rest.springboot.bean.RestProperties;
-import cn.rylan.rest.springboot.bean.SpringBeanFactory;
+import cn.rylan.rpc.springboot.bean.SpringBeanFactory;
 import cn.rylan.rpc.constant.ProtocolConstants;
 import cn.rylan.rpc.constant.SerializerType;
 import cn.rylan.rpc.model.RpcProtocol;
 import cn.rylan.rpc.model.RpcRequest;
 import cn.rylan.rpc.netty.codec.MessageFrameDecoder;
 import cn.rylan.rpc.netty.codec.RpcCodec;
-import cn.rylan.rpc.springboot.RpcProperties;
+import cn.rylan.rpc.springboot.bean.RpcProperties;
 import cn.rylan.springcloud.discovery.ServiceDiscovery;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -35,7 +33,6 @@ import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * author: Rylan
@@ -49,31 +46,21 @@ public class Client {
 
     private static final Map<String, Map<String, Channel>> SERVICE_MAP = new ConcurrentHashMap<>();
 
-//    private static final Map<String, Channel> CHANNEL_MAP = new ConcurrentHashMap<>();
+    private static final Map<Channel, ServiceInstance> INSTANCE_CHANNEL_MAP = new ConcurrentHashMap<>();
 
-    private static final Integer RECONNECT_TIMEOUT = 20000;
+    private static final Integer RECONNECT_TIMEOUT = 1000000;
 
     private ServiceDiscovery serviceDiscovery;
 
     private String balanceType;
 
-    private RpcProperties rpcProperties;
-
-
     private Balancer balancer = new RoundRobinBalancer();
 
-
-    /**
-     * 反存Channel和Service的关系,方便重连
-     */
-    protected static final Map<Channel, String> CHANNEL_MAP_SERVICE = new ConcurrentHashMap<>();
-
-
-    protected static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
+    protected ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
 
 
     public Client(ServiceDiscovery serviceDiscovery) {
-        rpcProperties = SpringBeanFactory.getBean(RpcProperties.class);
+
         bootstrap = new Bootstrap();
         bootstrap.group(new NioEventLoopGroup())
                 .channel(NioSocketChannel.class)
@@ -96,14 +83,15 @@ public class Client {
 
     @SneakyThrows
     private Channel connect(ServiceInstance serviceInstance) {
+
         CompletableFuture<Channel> cf = new CompletableFuture<>();
         bootstrap.connect(new InetSocketAddress(serviceInstance.getIp(), Integer.valueOf(serviceInstance.getPort()) + 1000)
         ).addListener((ChannelFutureListener) future -> {
             if (future.isSuccess()) {
-                log.info("client connected success address: {}", serviceInstance.getIp() + ":" + Integer.valueOf(serviceInstance.getPort()) + 1000);
+                log.info("client connected success address: {}", serviceInstance.getIp() + ":" + (Integer.valueOf(serviceInstance.getPort()) + 1000));
                 cf.complete(future.channel());
             } else {
-                throw new IllegalStateException();
+                cf.complete(null);
             }
         });
         return cf.get();
@@ -111,7 +99,8 @@ public class Client {
 
     @SneakyThrows
     public Object sendRequest(RpcRequest rpcRequest) {
-        Channel channel = getChannel(rpcRequest);
+        String serviceName = rpcRequest.getServiceName();
+        Channel channel = getChannel(serviceName);
         DefaultPromise<Object> promise;
         if (channel.isActive()) {
             promise = new DefaultPromise<>(channel.eventLoop());
@@ -135,8 +124,7 @@ public class Client {
         }
     }
 
-    private Channel getChannel(RpcRequest rpcRequest) {
-        String serviceName = rpcRequest.getServiceName();
+    private Channel getChannel(String serviceName) throws Exception {
         Map<String, Channel> channelMap = SERVICE_MAP.get(serviceName);
         List<ServiceInstance> allService = serviceDiscovery.getAllService(serviceName);
         balancer = ExtensionLoad.getExtensionLoader(Balancer.class)
@@ -147,51 +135,53 @@ public class Client {
             Map<String, Channel> CHANNEL_MAP = new ConcurrentHashMap<>();
             CHANNEL_MAP.put(serviceInstance.getPort(), connect);
             SERVICE_MAP.put(serviceName, CHANNEL_MAP);
+            INSTANCE_CHANNEL_MAP.put(connect, serviceInstance);
             return connect;
         } else {
             Channel channel = channelMap.get(serviceInstance.getPort());
             if (channel == null) {
                 Channel connect = connect(serviceInstance);
                 channelMap.put(serviceInstance.getPort(), connect);
+                INSTANCE_CHANNEL_MAP.put(connect, serviceInstance);
                 return connect;
             } else {
+                INSTANCE_CHANNEL_MAP.put(channel, serviceInstance);
                 return channel;
             }
         }
-//        CHANNEL_MAP_SERVICE.put(channel, serviceName)
     }
 
     public void reconnect(Channel channel) {
-        String serviceName = CHANNEL_MAP_SERVICE.remove(channel);
-        SERVICE_MAP.remove(serviceName);
+
+        ServiceInstance serviceInstance = INSTANCE_CHANNEL_MAP.remove(channel);
         Long start = System.currentTimeMillis();
         //延迟一秒后每三秒执行一次
-        scheduledExecutorService.scheduleAtFixedRate(new ReConnectTask(start, serviceName), 1, 5, TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(new ReConnectTask(start, serviceInstance), 5, 3, TimeUnit.SECONDS);
     }
+
 
     class ReConnectTask implements Runnable {
 
         private final Long start;
-        private final String serviceName;
+        private final ServiceInstance serviceInstance;
 
-        public ReConnectTask(Long start, String serviceName) {
+        public ReConnectTask(Long start, ServiceInstance serviceInstance) {
             this.start = start;
-            this.serviceName = serviceName;
+            this.serviceInstance = serviceInstance;
         }
 
         @Override
         public void run() {
+
             log.info("reconnecting...");
             //超过最大时常
             if (System.currentTimeMillis() - start > RECONNECT_TIMEOUT) {
                 log.error("reconnect fail");
                 stopTask();
             } else {
-                Channel newChannel = connect(serviceDiscovery.getAllService(serviceName).get(0));
+                Channel newChannel = connect(serviceInstance);
                 if (newChannel != null) {
-                    log.info("reconnect success");
-                    CHANNEL_MAP_SERVICE.put(newChannel, serviceName);
-//                    SERVICE_MAP.put(serviceName, newChannel);
+                    log.info("reconnect success，scheduledExecutorService关闭");
                     stopTask();
                 }
             }

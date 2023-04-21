@@ -18,26 +18,21 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  */
-package cn.rylan.rest.springboot.bean;
+package cn.rylan.rpc.springboot.bean;
 
 import cn.rylan.springcloud.discovery.ServiceDiscovery;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Configuration
-
 public class AutoConfig {
 
-    public static List<ServiceInstance> serviceInstanceList = new ArrayList<>();
+
 
     @Bean(name = "stellalouRestTemplate")
     @ConditionalOnProperty(name = "spring.cloud.stellalou.rest.enable", havingValue = "true")
@@ -87,8 +82,6 @@ public class AutoConfig {
 //        if (properties.getInstanceId() != null) {
 //            builder.id(properties.getInstanceId());
 //        }
-//
-//        // TODO add customizer?
 //
 //        return builder.build();
 //    }

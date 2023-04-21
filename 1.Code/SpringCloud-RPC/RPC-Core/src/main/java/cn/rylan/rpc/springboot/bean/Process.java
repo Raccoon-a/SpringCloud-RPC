@@ -1,6 +1,5 @@
-package cn.rylan.rpc.springboot;
+package cn.rylan.rpc.springboot.bean;
 
-import cn.rylan.rest.springboot.bean.SpringBeanFactory;
 import cn.rylan.rpc.annotation.Register;
 import cn.rylan.rpc.annotation.Remote;
 import cn.rylan.rpc.netty.client.Client;
@@ -16,11 +15,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
+@ConditionalOnProperty(name = "spring.cloud.stellalou.rpc.enable", havingValue = "true")
 public class Process implements BeanPostProcessor {
 
     private final ServiceDiscovery serviceDiscovery = SpringBeanFactory.getBean(ServiceDiscovery.class);
-
-
 
     public static Map<String, Object> cache = new ConcurrentHashMap<>();
 

@@ -20,7 +20,7 @@
  */
 package cn.rylan.rest.annotation;
 
-import cn.rylan.rest.springboot.scan.RestHttpClientScan;
+import cn.rylan.rpc.springboot.scan.RestHttpClientScan;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -29,7 +29,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Import(RestHttpClientScan.class)
-public @interface EnableRestHttpClinet {
+public @interface EnableRestHttpClient {
     String[] basePackages() default {};
-    Class<?>[] classes() default {};
 }

@@ -1,7 +1,7 @@
 package cn.customer.config;
 
 import cn.rylan.rest.http.RequestInterceptor;
-import cn.rylan.model.RequestTemplate;
+import cn.rylan.rest.model.RequestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;

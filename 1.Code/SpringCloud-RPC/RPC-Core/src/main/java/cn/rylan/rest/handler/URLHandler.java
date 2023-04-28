@@ -20,8 +20,8 @@
  */
 package cn.rylan.rest.handler;
 
-import cn.rylan.model.MethodTemplate;
-import cn.rylan.model.ServiceInstance;
+import cn.rylan.rest.model.MethodTemplate;
+import cn.rylan.rest.model.ServiceInstance;
 import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.Method;

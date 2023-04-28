@@ -1,13 +1,13 @@
 package cn.rylan.rpc.netty.server;
 
 
-import cn.rylan.rpc.springboot.bean.SpringBeanFactory;
-import cn.rylan.rpc.constant.ProtocolConstants;
-import cn.rylan.rpc.constant.SerializerCode;
-import cn.rylan.rpc.model.RpcMessage;
-import cn.rylan.rpc.model.RpcProtocol;
-import cn.rylan.rpc.model.RpcRequest;
-import cn.rylan.rpc.model.RpcResponse;
+import cn.rylan.springboot.bean.SpringBeanFactory;
+import cn.rylan.rpc.netty.constant.ProtocolConstants;
+import cn.rylan.rpc.netty.constant.SerializerCode;
+import cn.rylan.rpc.netty.model.RpcMessage;
+import cn.rylan.rpc.netty.model.RpcProtocol;
+import cn.rylan.rpc.netty.model.RpcRequest;
+import cn.rylan.rpc.netty.model.RpcResponse;
 //import cn.rylan.rest.springboot.bean.Process;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,11 +56,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<RpcMessage> {
         }
     }
 
-    private String captureName(String name) {
-        name = name.substring(0, 1).toLowerCase() + name.substring(1);//UpperCase大写
-        return name;
 
-    }
 
     /**
      * Description：执行目标方法
@@ -82,9 +78,10 @@ public class ServerHandler extends SimpleChannelInboundHandler<RpcMessage> {
         }
         try {
             String methodName = rpcRequest.getMethodName();
-            String interfaceName = captureName(rpcRequest.getInterfaceName());
-            Object bean = SpringBeanFactory.getBean(interfaceName);
-            Object result = bean.getClass().getDeclaredMethod(methodName,parameterTypes).invoke(bean,params);
+            String interfaceName = rpcRequest.getInterfaceName();
+            Class<?> clazz = Class.forName(interfaceName);
+            Object bean = SpringBeanFactory.getBean(clazz);
+            Object result = bean.getClass().getDeclaredMethod(methodName, parameterTypes).invoke(bean, params);
             rpcResponse.setReturnValue(result);
 
         } catch (Exception e) {

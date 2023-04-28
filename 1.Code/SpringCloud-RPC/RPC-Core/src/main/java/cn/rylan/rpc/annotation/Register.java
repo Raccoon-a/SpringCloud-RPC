@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
 @Service
 public @interface Register {
 
-    String serviceName();
+//    String serviceName();
 }

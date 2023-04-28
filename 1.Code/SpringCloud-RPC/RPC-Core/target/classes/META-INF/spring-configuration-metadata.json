@@ -2,40 +2,40 @@
   "groups": [
     {
       "name": "spring.cloud.stellalou.rest",
-      "type": "cn.rylan.rpc.springboot.bean.RestProperties",
-      "sourceType": "cn.rylan.rpc.springboot.bean.RestProperties"
+      "type": "cn.rylan.springboot.bean.RestProperties",
+      "sourceType": "cn.rylan.springboot.bean.RestProperties"
     },
     {
       "name": "spring.cloud.stellalou.rpc",
-      "type": "cn.rylan.rpc.springboot.bean.RpcProperties",
-      "sourceType": "cn.rylan.rpc.springboot.bean.RpcProperties"
+      "type": "cn.rylan.springboot.bean.RpcProperties",
+      "sourceType": "cn.rylan.springboot.bean.RpcProperties"
     }
   ],
   "properties": [
     {
       "name": "spring.cloud.stellalou.rest.balancer",
       "type": "java.lang.String",
-      "sourceType": "cn.rylan.rpc.springboot.bean.RestProperties"
+      "sourceType": "cn.rylan.springboot.bean.RestProperties"
     },
     {
       "name": "spring.cloud.stellalou.rest.enable",
       "type": "java.lang.String",
-      "sourceType": "cn.rylan.rpc.springboot.bean.RestProperties"
+      "sourceType": "cn.rylan.springboot.bean.RestProperties"
     },
     {
       "name": "spring.cloud.stellalou.rpc.balancer",
       "type": "java.lang.String",
-      "sourceType": "cn.rylan.rpc.springboot.bean.RpcProperties"
+      "sourceType": "cn.rylan.springboot.bean.RpcProperties"
     },
     {
       "name": "spring.cloud.stellalou.rpc.enable",
       "type": "java.lang.String",
-      "sourceType": "cn.rylan.rpc.springboot.bean.RpcProperties"
+      "sourceType": "cn.rylan.springboot.bean.RpcProperties"
     },
     {
       "name": "spring.cloud.stellalou.rpc.port",
       "type": "java.lang.String",
-      "sourceType": "cn.rylan.rpc.springboot.bean.RpcProperties"
+      "sourceType": "cn.rylan.springboot.bean.RpcProperties"
     }
   ],
   "hints": []

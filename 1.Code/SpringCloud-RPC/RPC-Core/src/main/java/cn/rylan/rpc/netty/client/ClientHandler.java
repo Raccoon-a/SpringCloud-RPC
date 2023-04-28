@@ -1,11 +1,11 @@
 package cn.rylan.rpc.netty.client;
 
 
-import cn.rylan.rpc.constant.ProtocolConstants;
-import cn.rylan.rpc.constant.SerializerType;
-import cn.rylan.rpc.model.RpcMessage;
-import cn.rylan.rpc.model.RpcProtocol;
-import cn.rylan.rpc.model.RpcResponse;
+import cn.rylan.rpc.netty.constant.ProtocolConstants;
+import cn.rylan.rpc.netty.constant.SerializerType;
+import cn.rylan.rpc.netty.model.RpcMessage;
+import cn.rylan.rpc.netty.model.RpcProtocol;
+import cn.rylan.rpc.netty.model.RpcResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.timeout.IdleState;
@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ClientHandler extends SimpleChannelInboundHandler<RpcMessage> {
 
     public static Map<Integer, Promise<Object>> PROMISE_MAP = new ConcurrentHashMap<>();
+
     private Client client;
 
     public ClientHandler(Client client) {
@@ -36,6 +37,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<RpcMessage> {
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcMessage rpcMessage) {
         if (rpcMessage.getMsgType() == ProtocolConstants.RPC_RESPONSE) {
             RpcResponse rpcResponse = (RpcResponse) rpcMessage;
+            //TODO need bug fix
             Object value = rpcResponse.getReturnValue();
             Exception exception = rpcResponse.getException();
             Promise<Object> promise = PROMISE_MAP.get(rpcMessage.getRpcId());

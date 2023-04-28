@@ -1,6 +1,6 @@
 package cn.rylan.rpc.proxy;
 
-import cn.rylan.rpc.model.RpcRequest;
+import cn.rylan.rpc.netty.model.RpcRequest;
 import cn.rylan.rpc.netty.client.Client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sf.cglib.proxy.Enhancer;

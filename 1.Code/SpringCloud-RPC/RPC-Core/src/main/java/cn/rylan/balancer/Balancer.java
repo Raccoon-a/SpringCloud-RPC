@@ -20,7 +20,7 @@
  */
 package cn.rylan.balancer;
 
-import cn.rylan.model.ServiceInstance;
+import cn.rylan.rest.model.ServiceInstance;
 
 import java.util.List;
 

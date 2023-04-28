@@ -8,11 +8,6 @@ spring:
       connect-string: 127.0.0.1:2181
       discovery:
         prefer-ip-address: true
-    rest:
-      enable: true
-    rpc:
-      enable: true
-      port: 2318
-#    nacos:
-#      discovery:
-#        server-addr: 127.0.0.1:8848
+    stellalou:
+      rpc:
+        enable: true

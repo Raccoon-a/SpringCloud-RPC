@@ -20,11 +20,10 @@
  */
 package cn.rylan.springcloud.discovery;
 
-import cn.rylan.model.ServiceInstance;
+import cn.rylan.rest.model.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

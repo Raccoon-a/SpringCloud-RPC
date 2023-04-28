@@ -1,12 +1,12 @@
 package cn.rylan.rpc.netty.codec;
 
-import cn.rylan.rpc.constant.ProtocolConstants;
-import cn.rylan.rpc.model.RpcHeartBeat;
-import cn.rylan.rpc.model.RpcProtocol;
-import cn.rylan.rpc.model.RpcRequest;
-import cn.rylan.rpc.model.RpcResponse;
+import cn.rylan.rpc.netty.constant.ProtocolConstants;
+import cn.rylan.rpc.netty.model.RpcHeartBeat;
+import cn.rylan.rpc.netty.model.RpcProtocol;
+import cn.rylan.rpc.netty.model.RpcRequest;
+import cn.rylan.rpc.netty.model.RpcResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.gson.JsonSerializer;
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
@@ -51,7 +51,7 @@ public class RpcCodec extends ByteToMessageCodec<RpcProtocol> {
     }
 
     private Serializer getSerializer(byte serializerType) {
-        return new RpcJsonSerializer();
+        return new KryoSerializer();
     }
 
     @Override
@@ -82,6 +82,8 @@ public class RpcCodec extends ByteToMessageCodec<RpcProtocol> {
                 out.add(rpcRequest);
             }
             if (msgType == ProtocolConstants.RPC_RESPONSE) {
+                TypeReference<RpcResponse> typeReference = new TypeReference<RpcResponse>() {
+                };
                 RpcResponse rpcResponse = serializer.deserialize(RpcResponse.class, bytes);
                 rpcResponse.setMsgType(msgType);
                 out.add(rpcResponse);

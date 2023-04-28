@@ -20,7 +20,7 @@
  */
 package cn.rylan.rest.annotation;
 
-import cn.rylan.rpc.springboot.scan.RestHttpClientScan;
+import cn.rylan.springboot.scan.RestHttpClientScan;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;

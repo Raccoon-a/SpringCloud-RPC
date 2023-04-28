@@ -22,7 +22,7 @@ package cn.rylan.rest.handler;
 
 import cn.rylan.rest.http.HTTP;
 import cn.rylan.rest.http.HttpRequest;
-import cn.rylan.model.MethodTemplate;
+import cn.rylan.rest.model.MethodTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 

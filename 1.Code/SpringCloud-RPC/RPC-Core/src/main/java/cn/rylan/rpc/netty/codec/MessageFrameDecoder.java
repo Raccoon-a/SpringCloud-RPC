@@ -1,7 +1,7 @@
 package cn.rylan.rpc.netty.codec;
 
 
-import cn.rylan.rpc.constant.ProtocolConstants;
+import cn.rylan.rpc.netty.constant.ProtocolConstants;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import org.springframework.stereotype.Component;
 

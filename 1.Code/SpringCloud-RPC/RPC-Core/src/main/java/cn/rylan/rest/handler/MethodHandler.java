@@ -20,7 +20,7 @@
  */
 package cn.rylan.rest.handler;
 
-import cn.rylan.model.MethodTemplate;
+import cn.rylan.rest.model.MethodTemplate;
 import lombok.Data;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;

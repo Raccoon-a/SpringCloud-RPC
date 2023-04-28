@@ -26,9 +26,8 @@ public class Server {
 
     public static void start(Integer port) {
         try {
-            String address = InetAddress.getLocalHost().getHostAddress();
-            InetSocketAddress socketAddress = new InetSocketAddress(address, port);
-
+//            String address = InetAddress.getLocalHost().getHostAddress();
+            InetSocketAddress socketAddress = new InetSocketAddress(port);
             NioEventLoopGroup boss = new NioEventLoopGroup(1);
             NioEventLoopGroup worker = new NioEventLoopGroup();
             ServerBootstrap serverBootstrap = new ServerBootstrap().group(boss, worker)
@@ -48,7 +47,7 @@ public class Server {
                 boss.shutdownGracefully();
                 worker.shutdownGracefully();
             });
-        } catch (InterruptedException | UnknownHostException e) {
+        } catch (InterruptedException  e) {
             log.error("netty 启动失败: {}", e.getMessage());
         }
     }

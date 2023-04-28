@@ -20,7 +20,7 @@
  */
 package cn.rylan.rest.http;
 
-import cn.rylan.model.RequestTemplate;
+import cn.rylan.rest.model.RequestTemplate;
 
 public interface RequestInterceptor {
 

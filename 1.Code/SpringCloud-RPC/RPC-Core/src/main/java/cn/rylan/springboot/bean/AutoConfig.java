@@ -20,19 +20,32 @@
  */
 package cn.rylan.springboot.bean;
 
+import cn.rylan.rest.http.RequestInterceptor;
+import cn.rylan.rest.model.RequestTemplate;
 import cn.rylan.springcloud.discovery.ServiceDiscovery;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 
 @Configuration
 public class AutoConfig {
 
 
+    @Bean
+    public ServiceDiscovery serviceDiscovery() {
+        return new ServiceDiscovery(SpringBeanFactory.getBean(DiscoveryClient.class));
+    }
 
     @Bean(name = "stellalouRestTemplate")
     @ConditionalOnProperty(name = "spring.cloud.stellalou.rest.enable", havingValue = "true")
@@ -49,11 +62,45 @@ public class AutoConfig {
         return new ObjectMapper();
     }
 
+    @Bean
+    @ConditionalOnProperty(name = "spring.cloud.stellalou.rest.trace-log", havingValue = "true")
+    public LogTrackInterceptor logTrackInterceptor() {
+        return new LogTrackInterceptor();
+    }
 
     @Bean
-    public ServiceDiscovery serviceDiscovery() {
-        return new ServiceDiscovery(SpringBeanFactory.getBean(DiscoveryClient.class));
+    @ConditionalOnProperty(name = "spring.cloud.stellalou.rest.trace-log", havingValue = "true")
+    public RestTrackInterceptor restTrackInterceptor() {
+        return new RestTrackInterceptor();
     }
+
+    @Bean
+    @ConditionalOnProperty(name = "spring.cloud.stellalou.rest.trace-log", havingValue = "true")
+    public WebConfig webConfig() {
+        return new WebConfig();
+    }
+
+
+    @Bean
+    @ConditionalOnProperty(name = "spring.cloud.stellalou.rest.enable", havingValue = "true")
+    public RequestInterceptor interceptor() {
+        return new RequestInterceptor() {
+            @Override
+            public void apply(RequestTemplate template) {
+                var requestAttributes = RequestContextHolder.getRequestAttributes();
+                assert requestAttributes != null;
+                var request = ((ServletRequestAttributes) requestAttributes).getRequest();
+                var cookie = request.getHeader("Cookie");
+                var headers = new HttpHeaders();
+                headers.add("Cookie", cookie);
+                headers.add("trace-id",LogTrackInterceptor.getTraceId());
+                headers.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                template.setHeaders(headers);
+            }
+        };
+    }
+
 
 //    @Bean
 //    @ConditionalOnMissingBean(ZookeeperRegistration.class)

@@ -27,11 +27,6 @@ public class Process implements BeanPostProcessor {
     @Override
     @SneakyThrows
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         Field[] fields = bean.getClass().getDeclaredFields();
         for (Field field : fields) {
             if (field.isAnnotationPresent(Remote.class)) {
@@ -49,6 +44,12 @@ public class Process implements BeanPostProcessor {
                 }
             }
         }
+        return bean;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+
         return bean;
 
     }

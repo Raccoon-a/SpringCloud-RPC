@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spring-cloud-starter-StellaLou</artifactId>
+    <artifactId>RPC-Core</artifactId>
     <version>1.0.0</version>
     <name>spring-cloud-starter-StellaLou</name>
     <description>毕业设计.</description>

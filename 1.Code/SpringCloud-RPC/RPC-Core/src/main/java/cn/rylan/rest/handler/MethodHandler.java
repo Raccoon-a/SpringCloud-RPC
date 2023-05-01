@@ -24,6 +24,7 @@ import cn.rylan.rest.model.MethodTemplate;
 import lombok.Data;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.websocket.server.PathParam;
 import java.lang.reflect.Method;
@@ -51,7 +52,7 @@ public class MethodHandler {
         Parameter[] parameters = method.getParameters();
         int index = 0;
         for (Parameter param : parameters) {
-            paramMap.put(param,values[index++]);
+            paramMap.put(param, values[index++]);
         }
     }
 
@@ -66,10 +67,10 @@ public class MethodHandler {
             if (key.isAnnotationPresent(PathVariable.class)) {
                 PathVariable pathVariable = key.getAnnotation(PathVariable.class);
                 pathValues.put(pathVariable.value(), value);
-            } else if(key.isAnnotationPresent(RequestBody.class)){
+            } else if (key.isAnnotationPresent(RequestBody.class)) {
                 body.set(value);
-            }else {
-                PathParam pathParam = key.getAnnotation(PathParam.class);
+            } else {
+                RequestParam pathParam = key.getAnnotation(RequestParam.class);
                 paramValues.put(pathParam.value(), value);
             }
         });

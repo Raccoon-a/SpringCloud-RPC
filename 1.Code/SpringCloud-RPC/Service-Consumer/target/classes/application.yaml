@@ -1,0 +1,20 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: UserService
+  cloud:
+    #注册中心配置
+    zookeeper:
+      connect-string: 127.0.0.1:2181
+      discovery:
+        prefer-ip-address: true
+    #远程调用配置
+    stellalou:
+      rest:
+        enable: true
+        trace-log: true
+      rpc:
+        enable: true
+        balancer: roundRobin

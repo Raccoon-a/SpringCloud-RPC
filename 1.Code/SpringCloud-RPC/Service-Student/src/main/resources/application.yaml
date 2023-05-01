@@ -1,0 +1,14 @@
+server:
+  port: 4000
+spring:
+  application:
+    name: StudentService
+  cloud:
+    zookeeper:
+      connect-string: 127.0.0.1:2181
+      discovery:
+        prefer-ip-address: true
+    stellalou:
+      rest:
+        enable: true
+        trace-log: true

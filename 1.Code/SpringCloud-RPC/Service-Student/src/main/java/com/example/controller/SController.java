@@ -4,8 +4,8 @@ import com.example.common.model.StudentInfo;
 import com.example.common.model.TeacherInfo;
 import com.example.common.model.UserInfo;
 import com.example.common.resp.CommonReturnType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.platform.commons.logging.Logger;
+import org.junit.platform.commons.logging.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

@@ -7,6 +7,7 @@ import com.example.restClient.StudentClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 @Service
 public class TeacherServiceImpl implements TeacherService {
 
@@ -32,6 +34,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public List<TeacherInfo> getTeacherInfoByParam(Map<String, Object> param) {
+        log.info("被调用");
         Integer id = 1001;
         String name = "Joh";
         String password = "123456";

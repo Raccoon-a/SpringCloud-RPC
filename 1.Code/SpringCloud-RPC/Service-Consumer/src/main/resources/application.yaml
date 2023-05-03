@@ -14,7 +14,8 @@ spring:
     stellalou:
       rest:
         enable: true
-        trace-log: true
+        trace-log: false
       rpc:
         enable: true
         balancer: roundRobin
+        step: 1000

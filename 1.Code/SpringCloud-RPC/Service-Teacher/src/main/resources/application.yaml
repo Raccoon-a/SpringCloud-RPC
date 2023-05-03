@@ -1,6 +1,9 @@
+
+---
 server:
   port: 6000
 spring:
+  profiles: server1
   application:
     name: TeacherService
   cloud:
@@ -13,3 +16,23 @@ spring:
         enable: true
       rpc:
         enable: true
+        port: 7000
+
+---
+server:
+  port: 13000
+spring:
+  profiles: server2
+  application:
+    name: TeacherService
+  cloud:
+    zookeeper:
+      connect-string: 127.0.0.1:2181
+      discovery:
+        prefer-ip-address: true
+    stellalou:
+      rest:
+        enable: true
+      rpc:
+        enable: true
+        port: 14000
